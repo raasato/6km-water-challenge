@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Water Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>The 6 KM Water Walk</h1>
+
+    <p>Distance: <span id="distance">0.0</span> KM</p>
+    <progress id="distance-progress" value="0" max="6"></progress>
+
+    <p>Water: <span id="water">100</span>%</p>
+    <progress id="water-progress" value="100" max="100"></progress>
+
+    <p>Heat: <span id="heat">0</span>%</p>
+    <progress id="heat-progress" value="0" max="100"></progress>
+
+    <p>Time: <span id="timer">0</span> seconds</p>
+
+    <button id="walk-button">Walk</button>
+    <button id="run-button">Run</button>
+    <button id="reset-button">Reset</button>
+    <button id="restart-button" hidden>Play Again!</button>
+
+    <div>
+        <h3>Message</h3>
+        <p id="message">Click Walk or Run to start your journey.</p>
+    </div>
+
+    <div>
+        <h3>Game Result</h3>
+        <p id="result">Game in progress...</p>
+    </div>
+
+    <div>
+        <h3>Leaderboard (Best Times)</h3>
+        <ol id="leaderboard-list"></ol>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
