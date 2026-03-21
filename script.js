@@ -388,7 +388,6 @@ function walkAction() {
 function runAction() {
 	// Start timer if this is the first action
 	startTimerIfNeeded();
-	// Player moved, so reset idle counter
 	secondsSinceLastMove = 0;
 
 	// Run is faster but uses more resources than walking
