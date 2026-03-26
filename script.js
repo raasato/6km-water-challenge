@@ -48,6 +48,51 @@ const HEAT_COOL_RATE = 1;
 const LEADERBOARD_KEY = "charityWaterLeaderboard";
 
 // --------------------------------
+// 2.5) SOUND SETTINGS
+// --------------------------------
+// Create reusable sound objects once so we can play them during the game.
+const sounds = {
+	walk: new Audio("sound/walk.mp3"),
+	win: new Audio("sound/game-win.mp3"),
+  run: new Audio("sound/run.mp3"),
+  rain: new Audio("sound/rain.mp3"),
+  fire: new Audio("sound/fire.mp3"),
+  lose: new Audio("sound/game-lose.mp3"),
+  milestone: new Audio("sound/milestone.mp3"),
+  water: new Audio("sound/water-drop.mp3"),
+  money: new Audio("sound/money.mp3"),
+  splash: new Audio("sound/splash.mp3"),
+  warmth: new Audio("sound/warmth.mp3"),
+  wind: new Audio("sound/wind.mp3")
+};
+
+// Keep the volume moderate so effects are noticeable but not too loud.
+sounds.walk.volume = 0.45;
+sounds.win.volume = 0.6;
+sounds.run.volume = 0.6;
+sounds.rain.volume = 0.5;
+sounds.fire.volume = 0.5;
+sounds.lose.volume = 0.6;
+sounds.milestone.volume = 0.5;
+sounds.water.volume = 0.5;
+sounds.money.volume = 0.5;
+sounds.splash.volume = 0.5;
+sounds.warmth.volume = 0.5;
+sounds.wind.volume = 0.5;
+
+// Helper function to play a sound from the start each time.
+function playSound(soundEffect) {
+	if (!soundEffect) {
+		return;
+	}
+
+	soundEffect.currentTime = 0;
+	soundEffect.play().catch((error) => {
+		console.log("Sound could not play yet:", error.message);
+	});
+}
+
+// --------------------------------
 // 3) GAME STATE - TIMER AND MILESTONES
 // --------------------------------
 // Prevents accidentally starting multiple timers
@@ -67,9 +112,12 @@ const milestonesShown = {
 // Fun facts about water that display when player reaches a milestone
 // Easy to add more - just add another string to the array!
 const milestoneFacts = [
-	"Millions of people walk long distances every day to collect water.",
-	"Access to clean water changes health, education, and opportunity.",
-	"Clean water helps families spend less time collecting water and more time learning and working."
+	"Access to clean water means education, income and health - especially for women and children.",
+	"696 million people in the world live without clean water.",
+	"People spend hours every day walking to collect water for their family, keeping children out of school and adults out of work.",
+  "The water collected often carries diseases that can make everyone sick.",
+  "Children under-five are on average more than 20 times more likely to die from illnesses linked to unsafe water and bad sanitation than from conflict.",
+  "Women and girls are responsible for water collection in 7 out of 10 households."
 ];
 
 // --------------------------------
@@ -192,6 +240,7 @@ function launchConfetti() {
 // ===============================================
 function launchRainEffect() {
 	console.log("launchRainEffect() called");
+	playSound(sounds.rain);
 
 	// Remove old rain layer first to avoid stacking multiple effects
 	const existingRainLayer = document.querySelector(".rain-layer");
@@ -258,6 +307,7 @@ function startSnow() {
 // Visual heat effect for summer: screen flashes red with a heat pulse
 function launchHeatEffect() {
 	console.log("launchHeatEffect() called");
+  playSound(sounds.fire);
 
 	// Remove any existing heat overlay to prevent stacking
 	const existingHeatOverlay = document.querySelector(".heat-overlay");
@@ -534,6 +584,7 @@ function showMilestoneMessage() {
 		console.log("[Milestone] Triggered message:", milestoneText);
 		console.log("[Milestone] Water before reward:", water);
 		messageEl.textContent = "Charity: Water reward received! 10% water bonus added.";
+    playSound(sounds.milestone); // Play milestone sound effect
 
 		// Give 10% water bonus, but cap at 100%
 		water = Math.min(100, water + 10);
@@ -665,10 +716,12 @@ function endGame(finalMessage, didWin, lossReason) {
 	if (didWin) {
 		console.log("[EndGame] Player won! Launching celebration effects");
 		launchConfetti(); // Celebrate the victory!
+    playSound(sounds.win); // Play win sound effect
 		addTimeToLeaderboard(timeElapsed); // Add this win to the leaderboard
 		renderLeaderboard(); // Update the displayed leaderboard
 	} else {
 		// Player lost - show the appropriate loss overlay
+    playSound(sounds.lose); // Play lose sound effect
 		if (lossReason === "frost") {
 			console.log("[EndGame] Loss reason: frost - launching frost effect");
 			launchFrostEffect();
@@ -910,7 +963,7 @@ function spawnItem() {
   let type = "season"; // Default type
 
   // 20% chance for donation
-  if (Math.random() < 0.2) {
+  if (Math.random() < 0.3) {
     type = "donation";
     item.classList.add("donation-item");
     item.textContent = "💰";
@@ -918,9 +971,11 @@ function spawnItem() {
     item.onclick = () => {
       water = Math.min(100, water + 10); // Donation gives 10% water
       messageEl.textContent = "You received a donation! +10% water.";
+      console.log("Donation received!");
       item.remove();
       activeItems--;
       updateStats();
+      playSound(sounds.money); // Play donation sound effect
     };
   }
   else {
@@ -932,9 +987,11 @@ function spawnItem() {
       item.onclick = () => {
         water = Math.min(100, water + 5);
         messageEl.textContent = "You found water! +5% water.";
+        console.log("Water found!");
         item.remove();
         activeItems--;
         updateStats();
+        playSound(sounds.water); // Play water collection sound effect
       };
     }
     // SPRING
@@ -945,9 +1002,11 @@ function spawnItem() {
       item.onclick = () => {
         water = Math.min(100, water + 7);
         messageEl.textContent = "You collected rainwater! +7% water.";
+        console.log("Rainwater collected!");
         item.remove();
         activeItems--;
         updateStats();
+        playSound(sounds.splash); // Play rain collection sound effect
       };
     }
     // WINTER
@@ -958,9 +1017,11 @@ function spawnItem() {
       item.onclick = () => {
         frost = Math.max(0, frost - 10); // Reduces frost by 10%
         messageEl.textContent = "You found warmth! -10% frost.";
+        console.log("Warmth found!");
         item.remove();
         activeItems--;
         updateStats();
+        playSound(sounds.warmth); // Play warmth collection sound effect
       };
   }
   // SUMMER
@@ -971,9 +1032,11 @@ function spawnItem() {
       item.onclick = () => {
         heat = Math.max(0, heat - 10); // Reduces heat by 10%
         messageEl.textContent = "You found shade! -10% heat.";
+        console.log("Shade found!");
         item.remove();
         activeItems--;
         updateStats();
+        playSound(sounds.wind); // Play wind collection sound effect
       };
     }
   }
@@ -999,6 +1062,7 @@ function spawnItem() {
 function walkAction() {
 	console.log("Walk Action Start");
 	console.log("[Walk] Before:", { distance, water, heat, frost, season });
+	playSound(sounds.walk);
 
 	// Start the game timer on first action
 	startTimerIfNeeded();
@@ -1089,6 +1153,7 @@ function walkAction() {
 function runAction() {
 	console.log("Run Action Start");
 	console.log("[Run] Before:", { distance, water, heat, frost, season });
+  playSound(sounds.run);
 
 	// Start the game timer on first action
 	startTimerIfNeeded();

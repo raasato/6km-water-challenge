@@ -45,6 +45,10 @@ body > * {
 h1 {
 	margin: 0 auto 20px;
 	padding: 22px 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
 	border: 2px solid var(--Border);
 	border-radius: 18px;
 	background: linear-gradient(90deg, var(--Blue), #67b9ff 58%, var(--Light-Blue));
@@ -52,6 +56,13 @@ h1 {
 	text-align: center;
 	letter-spacing: 0.3px;
 	box-shadow: var(--Shadow);
+}
+
+.title-logo {
+	max-width: min(320px, 88vw);
+	width: 100%;
+	height: auto;
+	display: block;
 }
 
 p {
