@@ -1,0 +1,20 @@
+{
+  "name": "The 6 KM Water Walk",
+  "short_name": "6 KM Walk",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffc907",
+  "icons": [
+    {
+      "src": "img/water-can-transparent.png",
+      "sizes": "600x600",
+      "type": "image/png"
+    },
+    {
+      "src": "img/water-can.png",
+      "sizes": "465x465",
+      "type": "image/png"
+    }
+  ]
+}
